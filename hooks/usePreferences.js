@@ -23,8 +23,8 @@ const FAVORITES_KEY = "sb-favorites";
 
 const PreferencesContext = createContext(null);
 
-export function PreferencesProvider({ children }) {
-  const [lang, setLang] = useState("en");
+export function PreferencesProvider({ children, initialLang = null }) {
+  const [lang, setLang] = useState(initialLang || "en");
   const [theme, setTheme] = useState("light");
   const [favorites, setFavorites] = useState([]);
   const [transMap, setTransMap] = useState(null);
@@ -42,6 +42,12 @@ export function PreferencesProvider({ children }) {
     }
     if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
     setFavorites(savedFavorites);
+
+    if (initialLang) {
+      // Country pages pin a language, though the switcher still works.
+      setLang(initialLang);
+      return;
+    }
 
     // The language is always auto-detected on every page load — the user's
     // manual choice is session-only and never persisted in localStorage.

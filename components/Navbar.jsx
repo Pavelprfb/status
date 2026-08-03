@@ -1,17 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import usePreferences from "@/hooks/usePreferences";
 import { categories } from "@/data/categories";
 import LanguageSwitcher from "./LanguageSwitcher";
+import CountriesMenu from "./CountriesMenu";
 
 export default function Navbar() {
   const { lang, theme, t, setLanguage, toggleTheme } = usePreferences();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
+  const [countriesOpen, setCountriesOpen] = useState(false);
+  const countriesRef = useRef(null);
+
+  useEffect(() => {
+    const onDown = (e) => {
+      if (countriesRef.current && !countriesRef.current.contains(e.target)) {
+        setCountriesOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
 
   const isActive = (href) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -91,6 +104,35 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <div className="relative" ref={countriesRef}>
+            <button
+              type="button"
+              onClick={() => setCountriesOpen((v) => !v)}
+              aria-expanded={countriesOpen}
+              aria-label={t.navCountries}
+              className={`flex h-10 items-center gap-1.5 rounded-full border px-3 text-sm font-semibold transition-all ${
+                isActive("/country")
+                  ? "border-blue-600 bg-blue-600 text-white shadow-sm shadow-blue-600/25"
+                  : "border-slate-300 bg-white text-slate-700 hover:border-blue-400 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:text-blue-400"
+              }`}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
+              </svg>
+              <span className="hidden md:inline">{t.navCountries}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`h-4 w-4 transition-transform ${countriesOpen ? "rotate-180" : ""}`} aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            {countriesOpen && (
+              <div className="fixed inset-x-3 top-16 z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72">
+                <CountriesMenu t={t} onNavigate={() => setCountriesOpen(false)} />
+              </div>
+            )}
+          </div>
+
           <LanguageSwitcher lang={lang} onSelect={setLanguage} t={t} />
 
           <button

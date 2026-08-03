@@ -5,7 +5,9 @@
 //   - data/translations/index.js    (static loader map)
 //   - data/i18n-langs.js            (UI strings for every language)
 // Bangla is skipped: statuses and UI already have hand-written Bangla.
-// Resumable: languages with a complete cache are skipped.
+// Incremental & resumable: languages whose map already contains every
+// current source string are skipped; otherwise only the missing delta is
+// translated and merged into the existing map.
 //
 // Run: node scripts/translate-statuses.mjs
 
@@ -140,22 +142,33 @@ async function translateAll(texts, tl) {
 }
 
 // --- Caching helpers -------------------------------------------------------
+//
+// Incremental mode: existing per-language maps are merged with only the
+// missing strings (new statuses + new UI keys), so re-running the script
+// after adding categories only translates the delta.
 
 function langFile(code) {
   return join(TRANSLATIONS_DIR, `${code}.js`);
 }
 
-async function cachedIsComplete(code) {
+async function loadLangMap(code) {
   try {
     const mod = await import(pathToFileURL(langFile(code)).href);
-    const entries = Object.keys(mod.default || {});
-    if (entries.length === 0) return false;
-    // A complete status map has ~all statuses translated; count matches.
-    if (entries.length < statusItems.length * 0.9) return false;
-    return true;
+    return mod.default || {};
   } catch {
-    return false;
+    return {};
   }
+}
+
+function uiKeyReady(i18n, item) {
+  if (item.idx === null) return i18n[item.key] != null;
+  return Array.isArray(i18n[item.key]) && i18n[item.key][item.idx] != null;
+}
+
+function computeMissing(statusMap, i18n) {
+  const missingStatuses = statusItems.filter((txt) => !statusMap[txt]);
+  const missingUI = uiItems.filter((item) => !uiKeyReady(i18n, item));
+  return [...new Set([...missingStatuses, ...missingUI.map((i) => i.text)])];
 }
 
 function readI18nData() {
@@ -182,20 +195,6 @@ export default ${JSON.stringify(statusMap)};
   writeFileSync(langFile(code), body);
 }
 
-function buildI18nObject(translated) {
-  const obj = {};
-  for (const item of uiItems) {
-    const val = translated[item.text];
-    if (item.idx === null) {
-      obj[item.key] = val ?? item.text;
-    } else {
-      obj[item.key] ||= [];
-      obj[item.key][item.idx] = val ?? item.text;
-    }
-  }
-  return obj;
-}
-
 function buildStatusMap(translated) {
   const map = {};
   for (const txt of statusItems) {
@@ -217,16 +216,35 @@ async function main() {
     while (cursor < queue.length) {
       const code = queue[cursor++];
       try {
-        if ((await cachedIsComplete(code)) && i18nData[code]?.appName) {
+        const statusMap = await loadLangMap(code);
+        const i18n = i18nData[code] || {};
+        const needed = computeMissing(statusMap, i18n);
+        if (needed.length === 0) {
           console.log(`[${code}] cached — skipping`);
           cachedCount++;
           continue;
         }
-        console.log(`[${code}] translating ${allSources.length} strings...`);
-        const translated = await translateAll(allSources, code);
+        console.log(`[${code}] translating ${needed.length} missing strings (${statusItems.length} statuses total)...`);
+        const translated = await translateAll(needed, code);
         console.log("");
-        writeLangFile(code, buildStatusMap(translated));
-        i18nData[code] = buildI18nObject(translated);
+
+        const mergedMap = { ...statusMap, ...buildStatusMap(translated) };
+        writeLangFile(code, mergedMap);
+
+        const newI18n = {};
+        for (const item of uiItems) {
+          if (uiKeyReady(i18n, item)) continue;
+          const val = translated[item.text];
+          if (item.idx === null) {
+            newI18n[item.key] = val ?? item.text;
+          } else {
+            newI18n[item.key] ||= Array.isArray(i18n[item.key])
+              ? [...i18n[item.key]]
+              : [];
+            newI18n[item.key][item.idx] = val ?? item.text;
+          }
+        }
+        i18nData[code] = { ...i18n, ...newI18n };
         writeI18nData(i18nData);
         console.log(`[${code}] done`);
       } catch (err) {
