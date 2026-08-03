@@ -1,0 +1,40 @@
+"use client";
+
+import usePreferences from "@/hooks/usePreferences";
+import { interpolate } from "@/lib/i18n";
+import { statuses } from "@/data/statuses";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import StatusFeed from "./StatusFeed";
+
+export default function StatusBox() {
+  const { t } = usePreferences();
+
+  return (
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+      <Navbar />
+
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-10">
+        <section className="mb-8 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+            {t.appName}
+          </h1>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-500 dark:text-slate-400 sm:text-base">
+            {t.tagline}
+          </p>
+          <p className="mt-2 inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-bold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
+            {interpolate(t.statusCount, statuses.length)}
+          </p>
+        </section>
+
+        <StatusFeed
+          statuses={statuses}
+          withTabs
+          withCategoryFilter
+        />
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
