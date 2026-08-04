@@ -1,0 +1,41 @@
+export const categories = {
+  love: { en: "Love", bn: "ভালোবাসা", emoji: "❤️" },
+  friendship: { en: "Friendship", bn: "বন্ধুত্ব", emoji: "💛" },
+  sad: { en: "Sad", bn: "কষ্ট", emoji: "💔" },
+  motivation: { en: "Motivation", bn: "অনুপ্রেরণা", emoji: "🔥" },
+  islamic: { en: "Islamic", bn: "ইসলামিক", emoji: "🕌" },
+  funny: { en: "Funny", bn: "মজার", emoji: "😄" },
+  life: { en: "Life", bn: "জীবন", emoji: "🌱" },
+  attitude: { en: "Attitude", bn: "অ্যাটিটিউড", emoji: "😎" },
+  success: { en: "Success & Hustle", bn: "সফলতা ও পরিশ্রম", emoji: "🚀" },
+  breakup: { en: "Breakup", bn: "ব্রেকআপ", emoji: "😭" },
+  happy: { en: "Happy & Positive", bn: "আনন্দ ও ইতিবাচকতা", emoji: "😊" },
+  alone: { en: "Alone & Lonely", bn: "একাকীত্ব", emoji: "🌙" },
+  nature: { en: "Nature & Aesthetic", bn: "প্রকৃতি ও নান্দনিকতা", emoji: "🌿" },
+  birthday: { en: "Birthday & Special Day", bn: "জন্মদিন ও বিশেষ দিন", emoji: "🎂" },
+  political: { en: "Political & Social", bn: "রাজনীতি ও সামাজিক", emoji: "🗣️" },
+  foodie: { en: "Foodie", bn: "খাবারপ্রেমী", emoji: "🍕" },
+  travel: { en: "Travel", bn: "ভ্রমণ", emoji: "✈️" },
+};
+
+export const categoryDots = {
+  love: "bg-rose-500",
+  friendship: "bg-amber-500",
+  sad: "bg-sky-500",
+  motivation: "bg-emerald-500",
+  islamic: "bg-teal-500",
+  funny: "bg-violet-500",
+  life: "bg-indigo-500",
+  attitude: "bg-orange-500",
+  success: "bg-lime-500",
+  breakup: "bg-blue-500",
+  happy: "bg-yellow-500",
+  alone: "bg-fuchsia-500",
+  nature: "bg-green-500",
+  birthday: "bg-pink-500",
+  political: "bg-red-500",
+  foodie: "bg-cyan-500",
+  travel: "bg-purple-500",
+};
+
+export const categoryOrder = Object.keys(categories);
