@@ -12,12 +12,12 @@ export default function Footer() {
     <footer className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 md:grid-cols-3">
         <div>
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5" aria-hidden="true">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-              </svg>
-            </span>
+<div className="flex items-center gap-2.5">
+            <img
+              src="/icon/android/mipmap-xxxhdpi/ic_launcher.png"
+              alt="Social Status"
+              className="h-9 w-9 rounded-xl object-cover shadow-lg shadow-blue-500/30"
+            />
             <span className="text-lg font-bold text-slate-900 dark:text-white">{t.appName}</span>
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-slate-500 dark:text-slate-400">

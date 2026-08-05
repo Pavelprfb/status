@@ -16,7 +16,12 @@ export default function StatusBox() {
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-10">
         <section className="mb-8 text-center">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+          <h1 className="flex items-center justify-center gap-3 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+            <img
+              src="/icon/android/mipmap-xxxhdpi/ic_launcher.png"
+              alt=""
+              className="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-blue-500/30 sm:h-12 sm:w-12"
+            />
             {t.appName}
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-slate-500 dark:text-slate-400 sm:text-base">
