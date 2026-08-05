@@ -25,7 +25,7 @@ export default function CategoryFilter({ activeCategory, onChange, t }) {
       <p className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
         {t.categoriesLabel}
       </p>
-      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+      <div className="flex flex-wrap gap-2">
         {chips.map((chip) => {
           const isActive = activeCategory === chip.id;
           return (
@@ -34,7 +34,7 @@ export default function CategoryFilter({ activeCategory, onChange, t }) {
               type="button"
               onClick={() => onChange(chip.id)}
               aria-pressed={isActive}
-              className={`flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all active:scale-95 ${
+              className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all active:scale-95 ${
                 isActive
                   ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/25"
                   : "border-slate-300 bg-white text-slate-700 hover:border-blue-400 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-400"

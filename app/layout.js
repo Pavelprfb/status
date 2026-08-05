@@ -3,8 +3,8 @@ import { PreferencesProvider } from "@/hooks/usePreferences";
 
 export const metadata = {
   title: {
-    default: "StatusBox — Beautiful Statuses in 72 Languages",
-    template: "%s | StatusBox",
+    default: "Social Status",
+    template: "%s | Social Status",
   },
   description:
     "2550+ original Facebook, WhatsApp and social media statuses auto-translated into 72 languages. Browse 17 categories, search, copy with one tap and save your favorites.",
@@ -28,10 +28,10 @@ export const metadata = {
   ],
   authors: [{ name: "Pabel Islam" }],
   creator: "Pabel Islam",
-  openGraph: {
-    title: "StatusBox — Beautiful Statuses in 72 Languages",
+openGraph: {
+    title: "Social Status",
     description:
-      "2550+ original statuses for every platform, auto-translated into 72 languages. Copy and share with one tap.",
+      "2550+ original statuses auto-translated into 72 languages. Copy and share with one tap.",
     type: "website",
     locale: "en_US",
     alternateLocale: "bn_BD",
@@ -39,6 +39,21 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: [
+      { url: "/icon/android/mipmap-mdpi/ic_launcher.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon/android/mipmap-hdpi/ic_launcher.png", sizes: "72x72", type: "image/png" },
+      { url: "/icon/android/mipmap-xhdpi/ic_launcher.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon/android/mipmap-xxhdpi/ic_launcher.png", sizes: "144x144", type: "image/png" },
+      { url: "/icon/android/mipmap-xxxhdpi/ic_launcher.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon/appstore.png", sizes: "1024x1024", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon/android/mipmap-xxxhdpi/ic_launcher.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon/appstore.png", sizes: "1024x1024", type: "image/png" },
+    ],
+    shortcut: "/icon/android/mipmap-mdpi/ic_launcher.png",
   },
 };
 
@@ -51,8 +66,9 @@ export const viewport = {
 
 const preloadScript = `(function () {
   try {
-    var theme = localStorage.getItem("sb-theme") || "light";
-    if (theme === "dark") document.documentElement.classList.add("dark");
+    var saved = localStorage.getItem("sb-theme");
+    var dark = saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if (dark) document.documentElement.classList.add("dark");
   } catch (e) {}
   try {
     var loc = (navigator.language || "en").toLowerCase();
@@ -67,7 +83,7 @@ const preloadScript = `(function () {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "StatusBox",
+  name: "Social Status",
   description:
     "2550+ original statuses auto-translated into 72 languages for every social media platform.",
   inLanguage: ["en", "bn", "hi", "ur", "ar", "es", "fr", "pt", "de", "ru", "zh", "ja"],

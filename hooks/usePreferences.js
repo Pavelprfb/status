@@ -25,7 +25,8 @@ const PreferencesContext = createContext(null);
 
 export function PreferencesProvider({ children, initialLang = null }) {
   const [lang, setLang] = useState(initialLang || "en");
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("auto");
+  const [systemDark, setSystemDark] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [transMap, setTransMap] = useState(null);
   const [toast, setToast] = useState(null);
@@ -40,7 +41,8 @@ export function PreferencesProvider({ children, initialLang = null }) {
     } catch {
       savedFavorites = [];
     }
-    if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
+    if (savedTheme === "light" || savedTheme === "dark" || savedTheme === "auto")
+      setTheme(savedTheme);
     setFavorites(savedFavorites);
 
     if (initialLang) {
@@ -90,9 +92,19 @@ export function PreferencesProvider({ children, initialLang = null }) {
   }, [lang]);
 
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = (e) => setSystemDark(e.matches);
+    setSystemDark(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  const effectiveTheme = theme === "auto" ? (systemDark ? "dark" : "light") : theme;
+
+  useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+    document.documentElement.classList.toggle("dark", effectiveTheme === "dark");
+  }, [theme, effectiveTheme]);
 
   useEffect(() => {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
@@ -127,8 +139,8 @@ export function PreferencesProvider({ children, initialLang = null }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  }, []);
+    setTheme(effectiveTheme === "dark" ? "light" : "dark");
+  }, [effectiveTheme]);
 
   const toggleFavorite = useCallback((id) => {
     setFavorites((prev) =>
@@ -166,7 +178,7 @@ export function PreferencesProvider({ children, initialLang = null }) {
   const value = useMemo(
     () => ({
       lang,
-      theme,
+      theme: effectiveTheme,
       t,
       favorites,
       toast,
@@ -176,7 +188,7 @@ export function PreferencesProvider({ children, initialLang = null }) {
       toggleFavorite,
       handleCopy,
     }),
-    [lang, theme, t, favorites, toast, statusText, setLanguage, toggleTheme, toggleFavorite, handleCopy]
+    [lang, effectiveTheme, t, favorites, toast, statusText, setLanguage, toggleTheme, toggleFavorite, handleCopy]
   );
 
   return (

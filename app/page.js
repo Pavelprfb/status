@@ -1,7 +1,7 @@
 import StatusBox from "@/components/StatusBox";
 
 export const metadata = {
-  title: "StatusBox — Beautiful Statuses in 72 Languages",
+  title: "Social Status",
   description:
     "2550+ original Facebook, WhatsApp and social media statuses auto-translated into 72 languages. Browse 17 categories, search, copy with one tap and save your favorites.",
   keywords: [
@@ -22,7 +22,7 @@ export const metadata = {
     "status in urdu",
   ],
   openGraph: {
-    title: "StatusBox — Beautiful Statuses in 72 Languages",
+    title: "Social Status",
     description:
       "2550+ original statuses for every platform, auto-translated into 72 languages. Copy and share with one tap.",
     type: "website",

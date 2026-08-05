@@ -80,18 +80,20 @@ export default function Navbar() {
               </svg>
             </button>
             {catOpen && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-60 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
-                {Object.entries(categories).map(([slug, cat]) => (
-                  <Link
-                    key={slug}
-                    href={`/categories/${slug}`}
-                    onClick={() => setCatOpen(false)}
-                    className={dropdownLinkClass(isActive(`/categories/${slug}`))}
-                  >
-                    <span aria-hidden="true">{cat.emoji}</span>
-                    <span>{t[`cat_${slug}`]}</span>
-                  </Link>
-                ))}
+              <div className="absolute left-0 top-full z-50 mt-2 w-[46rem] max-w-[calc(100vw-1rem)] rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
+                <div className="grid grid-flow-col grid-rows-3 gap-1">
+                  {Object.entries(categories).map(([slug, cat]) => (
+                    <Link
+                      key={slug}
+                      href={`/categories/${slug}`}
+                      onClick={() => setCatOpen(false)}
+                      className={dropdownLinkClass(isActive(`/categories/${slug}`))}
+                    >
+                      <span aria-hidden="true">{cat.emoji}</span>
+                      <span>{t[`cat_${slug}`]}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -104,7 +106,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="relative" ref={countriesRef}>
+          <div className="relative hidden lg:flex" ref={countriesRef}>
             <button
               type="button"
               onClick={() => setCountriesOpen((v) => !v)}

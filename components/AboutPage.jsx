@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import usePreferences from "@/hooks/usePreferences";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -11,6 +12,25 @@ const DEVELOPER = {
   founder: "Founder of StatusBox",
   location: "Bangladesh",
 };
+
+function DeveloperAvatar({ lang }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-2xl font-extrabold text-white shadow-lg shadow-blue-500/30">
+        {lang === "bn" ? "পিআই" : "PI"}
+      </div>
+    );
+  }
+  return (
+    <img
+      src="/admin/admin.jpg"
+      alt={DEVELOPER.name}
+      onError={() => setFailed(true)}
+      className="h-20 w-20 shrink-0 rounded-2xl border border-slate-200 object-cover shadow-lg shadow-blue-500/30 dark:border-slate-700"
+    />
+  );
+}
 
 function AboutPageInner() {
   const { t, lang } = usePreferences();
@@ -64,9 +84,7 @@ function AboutPageInner() {
             {t.aboutDeveloperTitle}
           </h2>
           <div className="mt-4 flex flex-col items-center gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-start dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-2xl font-extrabold text-white shadow-lg shadow-blue-500/30">
-              {lang === "bn" ? "পিআই" : "PI"}
-            </div>
+            <DeveloperAvatar lang={lang} />
             <div className="text-center sm:text-left">
               <p className="text-lg font-bold text-slate-900 dark:text-white">
                 {lang === "bn" ? "পাবেল ইসলাম" : DEVELOPER.name}
