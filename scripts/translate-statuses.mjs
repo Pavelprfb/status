@@ -40,12 +40,19 @@ mkdirSync(TRANSLATIONS_DIR, { recursive: true });
 
 const statusItems = [...new Set(statuses.map((s) => s.text.en))];
 
-const uiItems = []; // { key, idx|null, text }
+const uiItems = []; // { key, idx|null, field|null, text }
 for (const [key, value] of Object.entries(EN)) {
-  if (Array.isArray(value)) {
-    value.forEach((text, idx) => uiItems.push({ key, idx, text }));
+  if (Array.isArray(value) && value.some((v) => v && typeof v === "object")) {
+    value.forEach((obj, idx) => {
+      for (const [field, text] of Object.entries(obj)) {
+        if (typeof text !== "string") continue;
+        uiItems.push({ key, idx, field, text });
+      }
+    });
+  } else if (Array.isArray(value)) {
+    value.forEach((text, idx) => uiItems.push({ key, idx, field: null, text }));
   } else {
-    uiItems.push({ key, idx: null, text: value });
+    uiItems.push({ key, idx: null, field: null, text: value });
   }
 }
 for (const [slug, cat] of Object.entries(categories)) {
@@ -162,7 +169,10 @@ async function loadLangMap(code) {
 
 function uiKeyReady(i18n, item) {
   if (item.idx === null) return i18n[item.key] != null;
-  return Array.isArray(i18n[item.key]) && i18n[item.key][item.idx] != null;
+  const arr = i18n[item.key];
+  if (!Array.isArray(arr) || arr[item.idx] == null) return false;
+  if (item.field) return arr[item.idx]?.[item.field] != null;
+  return arr[item.idx] != null;
 }
 
 function computeMissing(statusMap, i18n) {
@@ -206,6 +216,18 @@ function buildStatusMap(translated) {
 
 // --- Main loop -------------------------------------------------------------
 
+const I18N_DIR = join(ROOT, "data", "i18n");
+
+function writeI18nSplitFiles(data) {
+  mkdirSync(I18N_DIR, { recursive: true });
+  for (const code of TARGETS) {
+    const body = `// AUTO-GENERATED - do not edit. Run: node scripts/translate-statuses.mjs
+export default ${JSON.stringify(data[code] || {})};
+`;
+    writeFileSync(join(I18N_DIR, `${code}.js`), body);
+  }
+}
+
 async function main() {
   const i18nData = readI18nData();
   const queue = [...TARGETS];
@@ -234,14 +256,19 @@ async function main() {
         const newI18n = {};
         for (const item of uiItems) {
           if (uiKeyReady(i18n, item)) continue;
-          const val = translated[item.text];
+          const val = translated[item.text] ?? item.text;
           if (item.idx === null) {
-            newI18n[item.key] = val ?? item.text;
+            newI18n[item.key] = val;
           } else {
             newI18n[item.key] ||= Array.isArray(i18n[item.key])
-              ? [...i18n[item.key]]
+              ? i18n[item.key].map((el) => (el && typeof el === "object" ? { ...el } : el))
               : [];
-            newI18n[item.key][item.idx] = val ?? item.text;
+            if (item.field) {
+              const existing = newI18n[item.key][item.idx] ?? {};
+              newI18n[item.key][item.idx] = { ...existing, [item.field]: val };
+            } else {
+              newI18n[item.key][item.idx] = val;
+            }
           }
         }
         i18nData[code] = { ...i18n, ...newI18n };
@@ -262,6 +289,7 @@ ${TARGETS.map((c) => `  ${c}: () => import("./${c}.js"),`).join("\n")}
 `;
   writeFileSync(join(TRANSLATIONS_DIR, "index.js"), body);
   writeI18nData(i18nData);
+  writeI18nSplitFiles(i18nData);
   console.log(
     `\nAll done. ${TARGETS.length - cachedCount} translated, ${cachedCount} cached.`
   );
