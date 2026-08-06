@@ -47,12 +47,12 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/terms" className="text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">
-                Terms &amp; Conditions
+                {t.navTerms}
               </Link>
             </li>
             <li>
               <Link href="/privacy" className="text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">
-                Privacy Policy
+                {t.navPrivacy}
               </Link>
             </li>
           </ul>
