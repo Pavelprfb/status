@@ -54,6 +54,9 @@ export const metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    yandex: "2a319fe27e925876",
+  },
   icons: {
     icon: [
       { url: "/icon/android/mipmap-mdpi/ic_launcher.png", sizes: "48x48", type: "image/png" },
