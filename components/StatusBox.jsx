@@ -2,12 +2,11 @@
 
 import usePreferences from "@/hooks/usePreferences";
 import { interpolate } from "@/lib/i18n";
-import { statuses } from "@/data/statuses";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import StatusFeed from "./StatusFeed";
 
-export default function StatusBox() {
+export default function StatusBox({ initialStatuses, totalCount }) {
   const { t } = usePreferences();
 
   return (
@@ -20,6 +19,7 @@ export default function StatusBox() {
             <img
               src="/icon/android/mipmap-xxxhdpi/ic_launcher.png"
               alt=""
+              fetchPriority="high"
               className="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-blue-500/30 sm:h-12 sm:w-12"
             />
             {t.appName}
@@ -28,12 +28,13 @@ export default function StatusBox() {
             {t.tagline}
           </p>
           <p className="mt-2 inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-bold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-            {interpolate(t.statusCount, statuses.length)}
+            {interpolate(t.statusCount, totalCount)}
           </p>
         </section>
 
         <StatusFeed
-          statuses={statuses}
+          initialStatuses={initialStatuses}
+          totalCount={totalCount}
           withTabs
           withCategoryFilter
         />

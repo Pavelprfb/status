@@ -26,9 +26,9 @@ export default function Footer() {
         </div>
 
         <nav aria-label="Footer quick links">
-          <h3 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
             {t.footerQuickLinks}
-          </h3>
+          </h2>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
               <Link href="/" className="text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">
@@ -49,9 +49,9 @@ export default function Footer() {
         </nav>
 
         <nav aria-label="Footer categories">
-          <h3 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
             {t.footerCategories}
-          </h3>
+          </h2>
           <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
             {Object.entries(categories).map(([slug, cat]) => (
               <li key={slug}>
@@ -68,7 +68,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-slate-200 py-5 dark:border-slate-800">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-center text-xs text-slate-400 dark:text-slate-500 sm:flex-row sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-center text-xs text-slate-500 dark:text-slate-400 sm:flex-row sm:px-6">
           <p>
             © {year} {t.appName}. {t.footerRights}
           </p>
@@ -83,7 +83,7 @@ export default function Footer() {
             ·{" "}
             <a
               href="mailto:pabelprfb@gmail.com"
-              className="text-slate-400 transition-colors hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+              className="text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
             >
               pabelprfb@gmail.com
             </a>

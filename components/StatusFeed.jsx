@@ -13,12 +13,35 @@ import Toast from "./Toast";
 
 const PAGE_SIZE = 24;
 
-export default function StatusFeed({ statuses, withTabs = false, withCategoryFilter = false }) {
+export default function StatusFeed({
+  statuses,
+  withTabs = false,
+  withCategoryFilter = false,
+  initialStatuses = null,
+  totalCount = null,
+}) {
   const { lang, t, favorites, toggleFavorite, handleCopy, toast, statusText } = usePreferences();
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [fullStatuses, setFullStatuses] = useState(null);
+
+  useEffect(() => {
+    if (!initialStatuses) return;
+    let cancelled = false;
+    import("@/data/statuses")
+      .then((mod) => {
+        if (!cancelled) setFullStatuses(mod.statuses || []);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [initialStatuses]);
+
+  const allStatuses = fullStatuses || initialStatuses || statuses;
+  const statusTotal = totalCount || statuses.length;
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
@@ -26,7 +49,7 @@ export default function StatusFeed({ statuses, withTabs = false, withCategoryFil
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return statuses.filter((status) => {
+    return allStatuses.filter((status) => {
       if (activeTab === "favorites" && !favorites.includes(status.id)) return false;
       if (activeCategory !== "all" && status.category !== activeCategory) return false;
       if (query) {
@@ -45,12 +68,12 @@ export default function StatusFeed({ statuses, withTabs = false, withCategoryFil
       }
       return true;
     });
-  }, [statuses, activeTab, activeCategory, search, favorites, statusText, t, lang]);
+  }, [allStatuses, activeTab, activeCategory, search, favorites, statusText, t, lang]);
 
   const shown = filtered.slice(0, visibleCount);
   const favoritesCount = useMemo(
-    () => statuses.filter((s) => favorites.includes(s.id)).length,
-    [statuses, favorites]
+    () => allStatuses.filter((s) => favorites.includes(s.id)).length,
+    [allStatuses, favorites]
   );
 
   return (
@@ -61,7 +84,7 @@ export default function StatusFeed({ statuses, withTabs = false, withCategoryFil
             activeTab={activeTab}
             onChange={setActiveTab}
             t={t}
-            allCount={statuses.length}
+            allCount={statusTotal}
             favoritesCount={favoritesCount}
           />
         ) : (

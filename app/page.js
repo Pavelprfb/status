@@ -1,4 +1,5 @@
 import StatusBox from "@/components/StatusBox";
+import { statuses } from "@/data/statuses";
 
 export const metadata = {
   title: "Social Status",
@@ -30,5 +31,7 @@ export const metadata = {
 };
 
 export default function Home() {
-  return <StatusBox />;
+  return (
+    <StatusBox initialStatuses={statuses.slice(0, 24)} totalCount={statuses.length} />
+  );
 }

@@ -51,6 +51,7 @@ export default function Navbar() {
             <img
               src="/icon/android/mipmap-xxxhdpi/ic_launcher.png"
               alt="Social Status"
+              fetchPriority="high"
               className="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-blue-500/30"
             />
             <span className="text-lg font-bold leading-tight text-slate-900 dark:text-white">

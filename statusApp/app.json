@@ -1,7 +1,0 @@
-{  "name": "statusApp",
-  "displayName": "Social Status",
-  "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-4300319598686746~6641383780",
-    "delay_app_measurement_init": false
-  }
-}

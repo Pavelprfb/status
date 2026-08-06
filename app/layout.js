@@ -1,5 +1,7 @@
 import "./globals.css";
+import { headers } from "next/headers";
 import { PreferencesProvider } from "@/hooks/usePreferences";
+import { languageFromAcceptLanguage } from "@/lib/locale";
 
 export const metadata = {
   title: {
@@ -47,12 +49,8 @@ openGraph: {
       { url: "/icon/android/mipmap-xhdpi/ic_launcher.png", sizes: "96x96", type: "image/png" },
       { url: "/icon/android/mipmap-xxhdpi/ic_launcher.png", sizes: "144x144", type: "image/png" },
       { url: "/icon/android/mipmap-xxxhdpi/ic_launcher.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon/appstore.png", sizes: "1024x1024", type: "image/png" },
     ],
-    apple: [
-      { url: "/icon/android/mipmap-xxxhdpi/ic_launcher.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon/appstore.png", sizes: "1024x1024", type: "image/png" },
-    ],
+    apple: { url: "/icon/android/mipmap-xxxhdpi/ic_launcher.png", sizes: "192x192", type: "image/png" },
     shortcut: "/icon/android/mipmap-mdpi/ic_launcher.png",
   },
 };
@@ -94,7 +92,12 @@ const jsonLd = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const headerList = await headers();
+  const initialLang = languageFromAcceptLanguage(
+    headerList.get("accept-language") || ""
+  );
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-full antialiased">
@@ -103,7 +106,7 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <PreferencesProvider>{children}</PreferencesProvider>
+        <PreferencesProvider initialLang={initialLang}>{children}</PreferencesProvider>
       </body>
     </html>
   );

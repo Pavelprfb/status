@@ -17,6 +17,7 @@ import {
   fetchCountry,
 } from "@/lib/locale";
 import translationLoaders from "@/data/translations/index.js";
+import uiTranslationLoaders from "@/data/i18n/index.js";
 
 const THEME_KEY = "sb-theme";
 const FAVORITES_KEY = "sb-favorites";
@@ -29,6 +30,7 @@ export function PreferencesProvider({ children, initialLang = null }) {
   const [systemDark, setSystemDark] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [transMap, setTransMap] = useState(null);
+  const [uiTrans, setUiTrans] = useState(null);
   const [toast, setToast] = useState(null);
   const toastTimer = useRef(null);
   const userChoseRef = useRef(false);
@@ -56,10 +58,14 @@ export function PreferencesProvider({ children, initialLang = null }) {
     setLang(detectLanguageFromLocale());
     let cancelled = false;
     (async () => {
-      const country = await fetchCountry();
-      if (cancelled || !country) return;
-      if (userChoseRef.current) return; // user picked meanwhile
-      setLang(languageFromCountry(country));
+      try {
+        const country = await fetchCountry();
+        if (cancelled || !country) return;
+        if (userChoseRef.current) return; // user picked meanwhile
+        setLang(languageFromCountry(country));
+      } catch {
+        /* keep detected locale language */
+      }
     })();
     return () => {
       cancelled = true;
@@ -81,6 +87,25 @@ export function PreferencesProvider({ children, initialLang = null }) {
       })
       .catch(() => {
         if (!cancelled) setTransMap({});
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
+
+  useEffect(() => {
+    if (lang === "en" || lang === "bn") {
+      setUiTrans(null);
+      return;
+    }
+    let cancelled = false;
+    const loader = uiTranslationLoaders[lang];
+    (loader ? loader() : Promise.reject(new Error("no loader")))
+      .then((mod) => {
+        if (!cancelled) setUiTrans(mod.default || {});
+      })
+      .catch(() => {
+        if (!cancelled) setUiTrans({});
       });
     return () => {
       cancelled = true;
@@ -116,7 +141,7 @@ export function PreferencesProvider({ children, initialLang = null }) {
     };
   }, []);
 
-  const t = useMemo(() => getTranslation(lang), [lang]);
+  const t = useMemo(() => getTranslation(lang, uiTrans), [lang, uiTrans]);
 
   const statusText = useCallback(
     (status) => {
