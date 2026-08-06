@@ -24,7 +24,7 @@ const FAVORITES_KEY = "sb-favorites";
 
 const PreferencesContext = createContext(null);
 
-export function PreferencesProvider({ children, initialLang = null }) {
+export function PreferencesProvider({ children, initialLang = null, autoDetect = true }) {
   const [lang, setLang] = useState(initialLang || "en");
   const [theme, setTheme] = useState("auto");
   const [systemDark, setSystemDark] = useState(false);
@@ -46,13 +46,10 @@ export function PreferencesProvider({ children, initialLang = null }) {
     if (savedTheme === "light" || savedTheme === "dark" || savedTheme === "auto")
       setTheme(savedTheme);
     setFavorites(savedFavorites);
+  }, []);
 
-    if (initialLang) {
-      // Country pages pin a language, though the switcher still works.
-      setLang(initialLang);
-      return;
-    }
-
+  useEffect(() => {
+    if (!autoDetect) return;
     // The language is always auto-detected on every page load — the user's
     // manual choice is session-only and never persisted in localStorage.
     setLang(detectLanguageFromLocale());
@@ -70,7 +67,7 @@ export function PreferencesProvider({ children, initialLang = null }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [autoDetect]);
 
   // Lazy-load the EN -> translation map for the active machine-translated
   // language. English and Bangla are embedded in the status data itself.

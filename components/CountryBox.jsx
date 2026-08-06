@@ -56,7 +56,7 @@ function CountryHero({ country }) {
 
 export default function CountryBox({ country }) {
   return (
-    <PreferencesProvider initialLang={country.lang}>
+    <PreferencesProvider initialLang={country.lang} autoDetect={false}>
       <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
         <Navbar />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-10">

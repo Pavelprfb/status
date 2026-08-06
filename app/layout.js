@@ -2,16 +2,17 @@ import "./globals.css";
 import { headers } from "next/headers";
 import { PreferencesProvider } from "@/hooks/usePreferences";
 import { languageFromAcceptLanguage } from "@/lib/locale";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, OG_IMAGE } from "@/lib/site";
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Social Status",
     template: "%s | Social Status",
   },
-  description:
-    "2550+ original Facebook, WhatsApp and social media statuses auto-translated into 72 languages. Browse 17 categories, search, copy with one tap and save your favorites.",
+  description: SITE_DESCRIPTION,
   keywords: [
-    "statusbox",
+    "social status",
     "facebook status",
     "whatsapp status",
     "status bangla",
@@ -30,13 +31,24 @@ export const metadata = {
   ],
   authors: [{ name: "Pabel Islam" }],
   creator: "Pabel Islam",
-openGraph: {
-    title: "Social Status",
-    description:
-      "2550+ original statuses auto-translated into 72 languages. Copy and share with one tap.",
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     type: "website",
     locale: "en_US",
     alternateLocale: "bn_BD",
+    images: [{ url: OG_IMAGE, width: 1024, height: 1024, alt: `${SITE_NAME} logo` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,
@@ -81,9 +93,9 @@ const preloadScript = `(function () {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Social Status",
-  description:
-    "2550+ original statuses auto-translated into 72 languages for every social media platform.",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
   inLanguage: ["en", "bn", "hi", "ur", "ar", "es", "fr", "pt", "de", "ru", "zh", "ja"],
   author: {
     "@type": "Person",

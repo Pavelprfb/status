@@ -1,12 +1,19 @@
 import StatusBox from "@/components/StatusBox";
 import { statuses } from "@/data/statuses";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  OG_IMAGE,
+  CONTACT_EMAIL,
+  FOUNDER_NAME,
+} from "@/lib/site";
 
 export const metadata = {
-  title: "Social Status",
-  description:
-    "2550+ original Facebook, WhatsApp and social media statuses auto-translated into 72 languages. Browse 17 categories, search, copy with one tap and save your favorites.",
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
   keywords: [
-    "statusbox",
+    "social status",
     "facebook status",
     "status bangla",
     "english status",
@@ -22,16 +29,54 @@ export const metadata = {
     "status in hindi",
     "status in urdu",
   ],
-  openGraph: {
-    title: "Social Status",
-    description:
-      "2550+ original statuses for every platform, auto-translated into 72 languages. Copy and share with one tap.",
-    type: "website",
+  alternates: {
+    canonical: SITE_URL,
   },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_US",
+    alternateLocale: "bn_BD",
+    images: [{ url: OG_IMAGE, width: 1024, height: 1024, alt: `${SITE_NAME} logo` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: OG_IMAGE,
+  email: `mailto:${CONTACT_EMAIL}`,
+  founder: {
+    "@type": "Person",
+    name: FOUNDER_NAME,
+    email: `mailto:${CONTACT_EMAIL}`,
+  },
+  sameAs: ["https://github.com/Pavelprfb"],
 };
 
 export default function Home() {
   return (
-    <StatusBox initialStatuses={statuses.slice(0, 24)} totalCount={statuses.length} />
+    <>
+      <StatusBox initialStatuses={statuses.slice(0, 24)} totalCount={statuses.length} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    </>
   );
 }
