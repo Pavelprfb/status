@@ -104,6 +104,9 @@ export default function Navbar() {
           <Link href="/contact" className={navLinkClass("/contact")}>
             {t.navContact}
           </Link>
+          <Link href="/apps" className={navLinkClass("/apps")}>
+            {t.navMoreApps}
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">
@@ -213,6 +216,15 @@ export default function Navbar() {
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
               </svg>
               {t.navContact}
+            </Link>
+            <Link href="/apps" onClick={() => setMobileOpen(false)} className={dropdownLinkClass(isActive("/apps"))}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+                <rect width="7" height="7" x="3" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="14" rx="1" />
+                <rect width="7" height="7" x="3" y="14" rx="1" />
+              </svg>
+              {t.navMoreApps}
             </Link>
           </div>
         </div>
