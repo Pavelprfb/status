@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import usePreferences from "@/hooks/usePreferences";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const APPS_API = "https://applistapi.p9x9.online/api/all-data";
 
@@ -57,8 +59,11 @@ export default function MoreApps() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+      <Navbar />
+
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
           {t.appName} Apps
         </h1>
@@ -110,6 +115,9 @@ export default function MoreApps() {
           Live app list unavailable — showing the latest known apps.
         </p>
       )}
+      </main>
+
+      <Footer />
     </div>
   );
 }
