@@ -54,7 +54,7 @@ export default function Navbar() {
               fetchPriority="high"
               className="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-blue-500/30"
             />
-            <span className="text-lg font-bold leading-tight text-slate-900 dark:text-white">
+            <span className="hidden text-lg font-bold leading-tight text-slate-900 dark:text-white sm:inline">
               {t.appName}
             </span>
           </Link>
@@ -150,7 +150,7 @@ export default function Navbar() {
               <rect width="7" height="7" x="14" y="14" rx="1" />
               <rect width="7" height="7" x="3" y="14" rx="1" />
             </svg>
-            <span className="hidden md:inline">{t.navMoreApps}</span>
+            <span>{t.navMoreApps}</span>
           </Link>
 
           <LanguageSwitcher lang={lang} onSelect={setLanguage} t={t} />
