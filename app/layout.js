@@ -117,6 +117,12 @@ const jsonLd = {
   },
 };
 
+const googleTagScript = `window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S6MC8KM87K');`;
+
 export default async function RootLayout({ children }) {
   const headerList = await headers();
   const initialLang = languageFromAcceptLanguage(
@@ -135,6 +141,16 @@ export default async function RootLayout({ children }) {
           id="yandex-metrika"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: yandexMetrikaScript }}
+        />
+        <Script
+          id="gtag-js"
+          src="https://www.googletagmanager.com/gtag/js?id=G-S6MC8KM87K"
+          strategy="beforeInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: googleTagScript }}
         />
         <noscript>
           <div>
