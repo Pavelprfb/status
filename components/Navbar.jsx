@@ -54,7 +54,7 @@ export default function Navbar() {
               fetchPriority="high"
               className="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-blue-500/30"
             />
-            <span className="hidden text-lg font-bold leading-tight text-slate-900 dark:text-white sm:inline">
+            <span className="text-lg font-bold leading-tight text-slate-900 dark:text-white">
               {t.appName}
             </span>
           </Link>
@@ -138,20 +138,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
-          <Link
-            href="/apps"
-            aria-label={t.navMoreApps}
-            className="flex h-10 items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-700 transition-all hover:border-blue-400 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:text-blue-400 lg:hidden"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0" aria-hidden="true">
-              <rect width="7" height="7" x="3" y="3" rx="1" />
-              <rect width="7" height="7" x="14" y="3" rx="1" />
-              <rect width="7" height="7" x="14" y="14" rx="1" />
-              <rect width="7" height="7" x="3" y="14" rx="1" />
-            </svg>
-            <span>{t.navMoreApps}</span>
-          </Link>
 
           <LanguageSwitcher lang={lang} onSelect={setLanguage} t={t} />
 
