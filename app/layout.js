@@ -1,5 +1,6 @@
 import "./globals.css";
 import { headers } from "next/headers";
+import Script from "next/script";
 import { PreferencesProvider } from "@/hooks/usePreferences";
 import { languageFromAcceptLanguage } from "@/lib/locale";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, OG_IMAGE } from "@/lib/site";
@@ -130,7 +131,11 @@ export default async function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <script dangerouslySetInnerHTML={{ __html: yandexMetrikaScript }} />
+                <Script
+          id="yandex-metrika"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: yandexMetrikaScript }}
+        />
         <noscript>
           <div>
             <img
